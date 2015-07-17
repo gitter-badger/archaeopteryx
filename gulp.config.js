@@ -18,11 +18,11 @@ module.exports = function () {
 
         //sources
         all_js: app_root + '/scripts/**/*.js',
-        source_js: app_root + '/scripts/*.js',
+        source_js: app_root + '/scripts/*.js', 
         all_less: app_root + '/styles/less/*.less',
-        all_compiled_css: app_root + '/styles/css/**/*.css',
+        all_compiled_css: app_root + '/styles/*.css',
         all_vendor_js: app_root + '/scripts/vendor/**/*.js',
-        all_vendor_css: app_root + '/styles/css/vendor/**/*.css',
+        all_vendor_css: app_root + '/styles/vendor/**/*.css',
         all_img: app_root + '/images/**/*.{jpg,png,gif}',
         all_fonts: app_root + '/fonts/**/*.{eot,svg,ttf,woff}',
         all_html: app_root + '/*.html',
@@ -33,7 +33,7 @@ module.exports = function () {
 
         //destinations
         tmp_folder: './.tmp',
-        css_folder: app_root + '/styles/css',
+        css_folder: app_root + '/styles',
         maps_folder: '../.maps',
 
         //Build

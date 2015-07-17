@@ -170,16 +170,6 @@ gulp.task('copy_vendor_fonts', function(){
         .pipe(gulp.dest(config.build['fonts']));
 });
 
-//use google CDN for scripts
-// gulp.task('add_cdn', function () {
-//     log('Optimizing scripts to use Google CDN')
-
-//     return gulp
-//         .src(config.all_html)
-//         .pipe($.googleCdn(require('./bower.json')))
-//         .pipe(gulp.dest(config.build['html']));
-// });
-
 //Concatenate CSS & JS in HTML files
 gulp.task('concat_html', function () {
     log('Concatenating Scripts and CSS files in BUILD tags');
@@ -201,8 +191,9 @@ gulp.task('deploy', function(){
     log('Saving the project into remote server');
 
     return gulp
-        .src(config.build['html'] + '/**/*')
+        .src(config.build['html'] + '/**')
         .pipe($.if(secure, $.sftp(config.ftp_credentials), $.ftp(config.ftp_credentials)))
+        .pipe($.print())
         .pipe($.plumber())
         .pipe($.util.noop());
 });
@@ -268,7 +259,7 @@ gulp.task('watch', ['connect', 'serve'], function(){
     gulp.watch(config.all_html_components,['add_parts']);
     gulp.watch(config.all_less,['compile_less']);
     gulp.watch(config.all_vendor_css,['inject_vendor_css']);
-    gulp.watch([config.all_js, config.source_js],['inject_js']);
+    gulp.watch(config.all_js,['inject_js']);
     gulp.watch('bower.json',['wiredep']);
 });
 
