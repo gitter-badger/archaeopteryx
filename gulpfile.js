@@ -26,10 +26,15 @@ gulp.task('compile_less', function() {
 
     return gulp
         .src([config.all_less])//path to less files
+        .pipe($.plumber({
+            handleError: function (err) {
+                log(err);
+                this.emit('end');
+            }
+        }))//check for errors
         .pipe($.print())//verbose
         .pipe($.sourcemaps.init())//start sourcemaps
         .pipe($.less())//compile less
-        .pipe($.plumber())//check for errors
         .pipe($.autoprefixer({browsers:['last 2 version', '> 5%', 'ie 7', 'ie 8']}))//add vendor prefixes
         .pipe($.concat(config.concat_css_file))//concat to file
         .pipe($.sourcemaps.write(config.maps_folder))//write sourcemaps files
@@ -43,6 +48,12 @@ gulp.task('check_js', function() {
 
     return gulp
         .src([config.all_js, '!' + config.all_vendor_js])//path to js files [do not check vendor js]
+        .pipe($.plumber({
+            handleError: function (err) {
+                log(err);
+                this.emit('end');
+            }
+        }))//check for errors
         .pipe($.print())//verbose
         .pipe($.jscs())//check code style
         .pipe($.jshint())//check potential errors
@@ -87,6 +98,12 @@ gulp.task('add_includes', ['add_modules'], function(){
 
     return gulp
         .src(config.tmp_folder + '/modules/*.html')
+        .pipe($.plumber({
+            handleError: function (err) {
+                log(err);
+                this.emit('end');
+            }
+        }))//check for errors
         .pipe($.print())
         .pipe($.fileInclude({
             prefix: '_ii_',
@@ -104,6 +121,12 @@ gulp.task('add_modules', function(){
 
     return gulp
         .src(config.all_html_templates)
+        .pipe($.plumber({
+            handleError: function (err) {
+                log(err);
+                this.emit('end');
+            }
+        }))//check for errors
         .pipe($.print())
         .pipe($.fileInclude({
             prefix: '_mm_',
@@ -121,8 +144,13 @@ gulp.task('wiredep', function(){
 
     return gulp
         .src(config.all_html)
+        .pipe($.plumber({
+            handleError: function (err) {
+                log(err);
+                this.emit('end');
+            }
+        }))//check for errors
         .pipe(wiredep())
-        .pipe($.plumber())
         .pipe(gulp.dest(config.root));
 });
 
@@ -178,6 +206,12 @@ gulp.task('concat_html', function () {
 
     return gulp
         .src(config.all_html)
+        .pipe($.plumber({
+            handleError: function (err) {
+                log(err);
+                this.emit('end');
+            }
+        }))//check for errors
         .pipe(assets)
         .pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.csso()))
@@ -192,9 +226,14 @@ gulp.task('deploy', function(){
 
     return gulp
         .src(config.build['html'] + '/**')
+        .pipe($.plumber({
+            handleError: function (err) {
+                log(err);
+                this.emit('end');
+            }
+        }))//check for errors
         .pipe($.if(secure, $.sftp(config.ftp_credentials), $.ftp(config.ftp_credentials)))
         .pipe($.print())
-        .pipe($.plumber())
         .pipe($.util.noop());
 });
 
